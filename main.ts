@@ -3,7 +3,12 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 
 const line =
-  "One star. Seated an hour late, coffee cold, and Monday charged me for the whole weekend anyway.";
+  "One star. Monday seated me an hour late, served cold coffee, and billed me for the whole weekend.";
+
+// The gate accepts 1–180 UTF-8 chars; fail loudly instead of writing a bad entry.
+if (Buffer.byteLength(line, "utf8") < 1 || Buffer.byteLength(line, "utf8") > 180) {
+  throw new Error(`entry line must be 1–180 chars, got ${Buffer.byteLength(line, "utf8")}`);
+}
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", line + "\n", "utf8");
